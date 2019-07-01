@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:background="@color/colorLightGrey"
+            tools:context=".activities.main.fragments.mainScreen.tabFragments.settings.ui.SettingsFragment"
+            android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:textColor="@color/colorPrimaryText"
+                  android:textStyle="bold"
+                  android:layout_margin="10dp"
+                  android:textSize="@dimen/small_text_size"
+                  android:id="@+id/bulkSmsSettingNoteTextView"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_marginStart="10dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_marginTop="10dp"
+                  android:textColor="@color/colorPrimaryText"
+                  android:textSize="@dimen/small_text_size"
+                  android:text="@string/select_delay_after_sending_one_sms"
+                  android:layout_height="wrap_content"/>
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_marginTop="15dp"
+                      android:layout_marginStart="10dp"
+                      android:layout_marginEnd="10dp"
+                      android:orientation="horizontal"
+                      android:background="@drawable/rectangle_secondary_color_outline"
+                      android:layout_height="wrap_content">
+
+            <TextView android:layout_width="wrap_content"
+                      android:textColor="@color/colorRed"
+                      android:textSize="@dimen/bigger_text_size"
+                      android:text="@string/minus"
+                      android:paddingStart="15dp"
+                      android:paddingEnd="15dp"
+                      android:paddingBottom="5dp"
+                      android:clickable="true"
+                      android:id="@+id/bulkSmsSettingDelaySmsDecrementTextView"
+                      android:focusable="true"
+                      android:background="?android:attr/selectableItemBackground"
+                      android:paddingTop="5dp"
+                      android:layout_height="wrap_content"/>
+
+            <View android:layout_width="1dp"
+                  android:background="@color/colorSecondaryText"
+                  android:layout_height="match_parent"/>
+
+            <TextView android:layout_width="80dp"
+                      android:textSize="@dimen/bigger_text_size"
+                      android:textColor="@color/colorPrimaryText"
+                      android:gravity="center"
+                      android:id="@+id/bulkSmsSettingDelayTextView"
+                      android:text="@string/_two"
+                      android:layout_height="match_parent"/>
+
+            <View android:layout_width="1dp"
+                  android:background="@color/colorSecondaryText"
+                  android:layout_height="match_parent"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:paddingStart="15dp"
+                      android:paddingEnd="15dp"
+                      android:paddingBottom="5dp"
+                      android:id="@+id/bulkSmsSettingDelaySmsIncrementTextView"
+                      android:paddingTop="5dp"
+                      android:clickable="true"
+                      android:focusable="true"
+                      android:background="?android:attr/selectableItemBackground"
+                      android:textColor="@color/colorRed"
+                      android:textSize="@dimen/bigger_text_size"
+                      android:text="@string/plus"
+                      android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_marginTop="5dp"
+                  android:layout_marginStart="10dp"
+                  android:visibility="gone"
+                  android:layout_marginEnd="10dp"
+                  android:textColor="@color/colorRed"
+                  android:textSize="12sp"
+                  android:id="@+id/bulkSmsSettingDelaySmsErrorTextView"
+                  android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_marginTop="20dp"
+                  android:layout_marginStart="10dp"
+                  android:layout_marginEnd="10dp"
+                  android:textSize="@dimen/small_text_size"
+                  android:text="@string/delete_all_bulk_sms_from_message_history"
+                  android:textColor="@color/colorPrimaryText"
+                  android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:backgroundTint="@color/colorRed"
+                android:id="@+id/bulkSmsSettingDeleteAllSmsButton"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:text="@string/delete_all"
+                android:layout_height="wrap_content"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="@dimen/small_text_size"
+                android:paddingStart="15dp"
+                android:id="@+id/bulkSmsSettingStoreHistoryCheckBox"
+                android:paddingEnd="15dp"
+                android:text="@string/store_bulk_sms_in_message_history"
+                android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:textColor="@color/colorPrimaryText"
+                  android:layout_marginTop="10dp"
+                  android:layout_marginStart="10dp"
+                  android:layout_marginEnd="10dp"
+                  android:textSize="@dimen/small_text_size"
+                  android:text="@string/donate_us_by_watching_the_ad"
+                  android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:id="@+id/bulkSmsSettingShowAdButton"
+                android:textColor="@color/colorWhite"
+                android:text="@string/show_ad"
+                android:textAllCaps="false"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                tools:context=".activities.main.fragments.SplashScreenFragment"
+                android:background="@drawable/purple_gradient_background"
+                android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_centerInParent="true"
+                  android:layout_height="wrap_content">
+
+        <TextView android:layout_width="match_parent"
+                  android:textAppearance="?android:textAppearanceLarge"
+                  android:textColor="@color/colorWhite"
+                  android:gravity="center"
+                  android:id="@+id/splashScreenWelcomeMessageTextView"
+                  android:text="@string/welcome_to_pro_sms_sender_not_equal"
+                  android:layout_height="wrap_content"/>
+
+        <ImageView android:layout_width="wrap_content"
+                   android:contentDescription="@null"
+                   android:id="@+id/splashScreenLogoImageView"
+                   android:layout_gravity="center"
+                   tools:src="@drawable/pro_sms_sender_logo"
+                   android:layout_height="wrap_content"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_alignParentBottom="true"
+              android:padding="10dp"
+              android:textColor="@color/colorWhite"
+              android:textAppearance="?android:textAppearanceSmall"
+              android:gravity="center"
+              android:text="@string/all_right_reserved"
+              android:autoLink="web"
+              android:layout_height="wrap_content"/>
+
+</RelativeLayout>
