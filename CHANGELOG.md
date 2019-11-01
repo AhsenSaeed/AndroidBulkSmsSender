@@ -15,7 +15,7 @@
 
 #### New Features
 
-1. Added the support for Dual Sim configuartion. 
+1. Added the support for Dual Sim configuration. 
 
 2. Now you can cancel the on-going bulk sms operation.
 
@@ -31,8 +31,7 @@
 
 `[FIXED]` Performance update for sending Bulk SMS. 
 
-`[FIXED]` Restart the Bulk SMS operation if the user closed the application during the on-going operation. Now you can simply close 
-the application (if you want) after sending Bulk SMS the process won't restart from the begining. 
+`[FIXED]` Restart the Bulk SMS operation if the user closed the application during the on-going operation. Now you can simply close the application (if you want) after sending Bulk SMS the process won't restart from the begining. 
 
 `[FIXED]` Application crash when sending long sms.
 
