@@ -12,6 +12,8 @@
 
 4. Added the **Crashlytics** Support.
 
+5. Added the **Kotlinx-Serialization** library.
+
 
 #### New Features
 
