@@ -13,7 +13,7 @@ import spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFrag
  * 6/28/19}
  */
 
-class MainScreenFragmentPagerAdapter(fragmentManager: FragmentManager) :
+class MainViewPagerAdapter(fragmentManager: FragmentManager) :
     FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val mainScreenFragments = listOf(

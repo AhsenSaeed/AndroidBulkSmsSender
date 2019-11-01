@@ -13,8 +13,8 @@ import java.util.*
 class DateTypeConverter {
 
     @TypeConverter
-    fun toDate(value: Long) = Date(value)
+    fun toDate(value: Long): Date? = Date(value)
 
     @TypeConverter
-    fun fromDate(date: Date) = date.time
+    fun fromDate(date: Date?): Long? = date?.time
 }

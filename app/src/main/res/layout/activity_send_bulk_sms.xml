@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:id="@+id/sendBulkSmsActivityRootView"
-              android:orientation="vertical"
-              tools:context=".activities.sendBulkSms.ui.SendBulkSmsActivity"
-              android:layout_height="match_parent"
-              android:background="@color/colorLightGrey">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/sendBulkSmsActivityRootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGrey"
+        android:orientation="vertical"
+        tools:context=".activities.sendBulkSms.ui.SendBulkSmsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -17,82 +17,85 @@
         <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/sendBulkSmsToolbar"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_height="wrap_content">
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <ImageView android:layout_width="wrap_content"
-                       android:contentDescription="@null"
-                       android:id="@+id/sendBulkSmsImageView"
-                       app:srcCompat="@drawable/white_send_vector_icon"
-                       android:layout_marginEnd="10dp"
-                       android:layout_marginRight="10dp"
-                       android:layout_gravity="end|center_vertical"
-                       android:layout_height="wrap_content"/>
+            <ImageView
+                    android:id="@+id/sendBulkSmsImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/white_send_vector_icon" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            app:backgroundTint="@color/colorLightBlue"
-            android:text="@string/choose_a_txt_file"
             android:id="@+id/sendBulkSmsChooseFileButton"
-            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/choose_a_txt_file"
             android:textAllCaps="false"
-            android:layout_height="wrap_content"/>
+            android:textColor="@color/colorWhite"
+            app:backgroundTint="@color/colorLightBlue" />
 
     <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sendBulkSmsTextMessageLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            app:hintEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="@string/message"
             app:boxStrokeColor="@color/colorPrimaryText"
+            app:counterEnabled="true"
+            app:counterMaxLength="300"
+            app:counterTextColor="@color/colorSecondaryText"
             app:helperTextEnabled="true"
             app:helperTextTextColor="@color/colorRed"
-            android:hint="@string/message"
-            android:id="@+id/sendBulkSmsTextMessageLayout"
-            app:hintTextColor="@color/colorSecondaryText"
-            app:counterEnabled="true"
-            app:counterMaxLength="1000"
-            app:counterTextColor="@color/colorSecondaryText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            app:hintEnabled="true"
+            app:hintTextColor="@color/colorSecondaryText">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
                 android:id="@+id/sendBulkSmsTextMessageEditText"
-                android:textColorHint="@color/colorSecondaryText"
-                android:hint="@string/message"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:gravity="top|start"
-                android:inputType="text"
+                android:hint="@string/message"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
                 android:textColor="@color/colorPrimaryText"
-                android:layout_height="100dp"/>
+                android:textColorHint="@color/colorSecondaryText" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ProgressBar android:layout_width="wrap_content"
-                     android:layout_gravity="center"
-                     android:visibility="gone"
-                     android:id="@+id/sendBulkSmsProgressBar"
-                     android:layout_height="wrap_content"/>
+        <ProgressBar
+                android:id="@+id/sendBulkSmsProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="15dp"
                 android:id="@+id/sendBulkSmsAllPhoneNumberRecyclerView"
-                android:layout_height="match_parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp" />
 
     </FrameLayout>
 

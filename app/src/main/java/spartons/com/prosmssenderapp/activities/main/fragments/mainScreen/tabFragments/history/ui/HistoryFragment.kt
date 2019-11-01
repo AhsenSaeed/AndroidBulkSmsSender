@@ -7,17 +7,16 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import spartons.com.prosmssenderapp.R
-import spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFragments.history.adapter.AllBulkSmsRecyclerViewAdapter
+import spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFragments.history.adapter.BulkSmsAdapter
 import spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFragments.history.viewModel.HistoryFragmentViewModel
 import spartons.com.prosmssenderapp.fragments.BaseFragment
+import spartons.com.prosmssenderapp.helper.UiHelper
 import spartons.com.prosmssenderapp.roomPersistence.BulkSms
-import spartons.com.prosmssenderapp.util.ViewModelFactory
-import javax.inject.Inject
-
 
 /**
  * Ahsen Saeed}
@@ -25,44 +24,48 @@ import javax.inject.Inject
  * 6/28/19}
  */
 
-class HistoryFragment : BaseFragment(), AllBulkSmsRecyclerViewAdapter.IBulkSmsDeleteListener {
+class HistoryFragment : BaseFragment(), BulkSmsAdapter.IBulkSmsDeleteListener {
 
-    @Inject
-    lateinit var factory: ViewModelFactory
-
-    private lateinit var viewModel: HistoryFragmentViewModel
-
-    private val allBulkSmsAdapter by lazy {
-        AllBulkSmsRecyclerViewAdapter(arrayListOf(), requireContext(), this)
-    }
+    private val bulkSmsAdapter = BulkSmsAdapter(this)
+    private val viewModel: HistoryFragmentViewModel by viewModel()
+    private val uiHelper: UiHelper by inject()
 
     companion object {
-        fun getInstance() =
-            HistoryFragment()
+        fun getInstance() = HistoryFragment()
     }
 
     override fun getLayoutResId() = R.layout.fragment_history
 
-    override fun inOnCreateView(mRootView: View, container: ViewGroup?, savedInstanceState: Bundle?) {
-        fragmentComponent.inject(this)
-        val bulkSmsHistoryNotFoundView = mRootView.findViewById<LinearLayout>(R.id.bulkSmsHistoryNotFoundView)
-        val bulkSmsHistoryRecyclerView = mRootView.findViewById<RecyclerView>(R.id.bulkSmsHistoryRecyclerView)
+    override fun inOnCreateView(
+        mRootView: View, container: ViewGroup?, savedInstanceState: Bundle?
+    ) {
+        val bulkSmsHistoryNotFoundView =
+            mRootView.findViewById<LinearLayout>(R.id.bulkSmsHistoryNotFoundView)
 
-        bulkSmsHistoryRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        bulkSmsHistoryRecyclerView.setHasFixedSize(true)
-        bulkSmsHistoryRecyclerView.adapter = allBulkSmsAdapter
+        mRootView.findViewById<RecyclerView>(R.id.bulkSmsHistoryRecyclerView).apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = bulkSmsAdapter
+        }
 
-        viewModel = ViewModelProviders.of(this, factory)[HistoryFragmentViewModel::class.java]
         viewModel.allTasks.observe(this, Observer {
-            if (it.isEmpty())
-                bulkSmsHistoryNotFoundView.visibility = VISIBLE
-            else
-                bulkSmsHistoryNotFoundView.visibility = GONE
-            allBulkSmsAdapter.updateBulkSmsItems(it)
+            bulkSmsAdapter.submitList(it)
+            bulkSmsHistoryNotFoundView.visibility = if (it.isEmpty()) VISIBLE else GONE
         })
     }
 
-    override fun onBulkSmsDelete(bulkSms: BulkSms) {
-        viewModel.deleteBulkSms(bulkSms)
+    override fun onBulkSmsAction(clickType: BulkSmsAdapter.ClickType, bulkSms: BulkSms) {
+        if (clickType == BulkSmsAdapter.ClickType.DELETE)
+            viewModel.deleteBulkSms(bulkSms)
+        else if (clickType == BulkSmsAdapter.ClickType.CANCEL) {
+            uiHelper.showSimpleMaterialDialog(
+                requireActivity(),
+                R.string.sms_send,
+                R.string.are_you_sure_you_want_to_cancel_the_on_going_operation,
+                R.drawable.red_error_vector_icon, "Yes", true, negativeText = "Cancel"
+            ) {
+                viewModel.cancelBulkSmsOperation(bulkSms)
+            }
+        }
     }
 }

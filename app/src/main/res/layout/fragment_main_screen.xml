@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
-        tools:context=".activities.main.fragments.mainScreen.ui.MainScreenFragment"
-        android:background="@color/colorWhite"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        tools:context=".activities.main.fragments.mainScreen.ui.MainScreenFragment">
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/mainScreenViewPager"
@@ -15,22 +14,22 @@
             android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabLayout
-                android:layout_width="match_parent"
-                app:tabGravity="fill"
-                android:layout_gravity="top"
                 android:id="@+id/mainScreenTabLayout"
-                android:elevation="15dp"
+                style="@style/Widget.MaterialComponents.TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="top"
                 android:background="@color/colorPrimary"
+                android:elevation="15dp"
+                app:tabGravity="fill"
+                app:tabIconTint="@color/colorWhite"
                 app:tabIndicator="@color/colorWhite"
+                app:tabIndicatorColor="@color/colorWhite"
+                app:tabIndicatorHeight="3dp"
+                app:tabInlineLabel="true"
+                app:tabRippleColor="@color/colorWhite"
                 app:tabSelectedTextColor="@color/colorWhite"
                 app:tabTextAppearance="@style/MineCustomTabText"
-                app:tabIndicatorColor="@color/colorWhite"
-                app:tabRippleColor="@color/colorWhite"
-                style="@style/Widget.MaterialComponents.TabLayout"
-                app:tabInlineLabel="true"
-                app:tabIconTint="@color/colorWhite"
-                app:tabIndicatorHeight="3dp"
-                android:layout_height="60dp"
                 tools:targetApi="lollipop">
 
         </com.google.android.material.tabs.TabLayout>
@@ -38,16 +37,16 @@
     </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mainScreenSendSmsFloatingActionButton"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginBottom="@dimen/floating_action_button_margin_bottom"
             app:backgroundTint="@color/colorLightBlue"
-            android:layout_marginEnd="15dp"
-            tools:style="@style/UnelevatedButton"
             app:srcCompat="@drawable/sms_vector_icon"
-            android:layout_height="wrap_content"
             app:tint="@color/colorWhite"
-            android:id="@+id/mainScreenSendSmsFloatingActionButton"
-            android:layout_marginRight="15dp"/>
+            tools:style="@style/UnelevatedButton" />
 
 </FrameLayout>

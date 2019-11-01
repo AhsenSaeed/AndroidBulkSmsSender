@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProSmsSenderApp</string>
+    <string name="app_name">Bulk SMS</string>
     <string name="welcome_to_pro_sms_sender_not_equal">Welcome to Pro SMS Sender!</string>
     <string name="all_right_reserved">All right reserved by ahsensaeed.com</string>
     <string name="history">History</string>
@@ -8,10 +8,10 @@
     <string name="choose_a_txt_file">Choose a .txt file</string>
     <string name="message">Write your message here</string>
     <string name="send_bulk_sms">Send Bulk Sms</string>
-    <string name="storage_permission_denied_content">Pro Sms Sender App requires the storage permission in order to read
+    <string name="storage_permission_denied_content">Pro Sms Sender App requires the <b>Storage Permission</b> in order to read
         the contact number list file.
     </string>
-    <string name="sms_permission_denied_content">Pro Sms Sender App requires the Sms Send permission in order to send
+    <string name="sms_permission_denied_content">Pro Sms Sender App requires the <b>Sms Send permission</b> in order to send
         sms to contact number list file.
     </string>
     <string name="sms_permission_denied">Sms Permission Denied</string>
@@ -29,13 +29,13 @@
     <string name="_two">2</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
-    <string name="delay_must_be_greater_than_two_seconds">Delay must be greater than two seconds.</string>
+    <string name="delay_must_be_greater_than_two_seconds">Delay must be greater than four seconds.</string>
     <string name="delete_all_bulk_sms_from_message_history">Delete all bulk sms from message history.</string>
     <string name="delete_all">Delete All</string>
     <string name="store_bulk_sms_in_message_history">Store bulk sms in message history.</string>
     <string name="donate_us_by_watching_the_ad">Donate us by watching the ad.</string>
     <string name="show_ad">Show Ad</string>
-    <string name="no_of_sms_sent">No of sms sent:</string>
+    <string name="no_of_sms_sent">Total no of sms sent:</string>
     <string name="start_time">Start-time</string>
     <string name="end_time">End-time</string>
     <string name="sms_content_colon">Sms Content :</string>
@@ -52,4 +52,23 @@
     <string name="all_contact_numbers_in_file_is_not_valid">All contact numbers in file is not valid. Please select
         different file.
     </string>
+    <string name="a_service_already_running_for_sending_bulk_sms_please_wait_until_it_finishes">A service already running for sending bulk sms please, wait until it finishes</string>
+    <string name="no_of_sms_to_be_sent">Total no of sms to be sent:</string>
+    <string name="sms_send">Sms Send</string>
+    <string name="are_you_sure_you_want_to_cancel_the_on_going_operation">Are you sure you want to cancel the on-going bulk sms sending operation?</string>
+    <string name="cancelled_time">Cancelled-time</string>
+    <string name="bulk_sms_process_cancelled">Bulk sms process cancelled.</string>
+    <string name="carrier_number">Carrier Number</string>
+    <string name="no_carrier_number_found_content">We found that you don\'t have any Carrier number installed in this device. So, first add a carrier number then only you can send SMS.</string>
+    <string name="allow_following_permission">Allow Bulk SMS following permission</string>
+    <string name="read_phone_state_permission_content"><b>Read Phone State:</b> This let us to read the carrier numbers used on this device. You can also apply settings from which carrier numbers you want to send Bulk SMS after granting the permission.</string>
+    <string name="phone_state_permission_denied_content">Pro Sms Sender App requires the <b>Read Phone State permission</b> in order to retrieve the current used carrier number.</string>
+    <string name="phone_state_permission_denied">Phone State Permission Denied</string>
+    <string name="please_select_from_which_carrier_number_you_want_to_send_bulk_sms">Please select from which carrier number you want to send the Bulk SMS. You can always change the number from settings.</string>
+    <string name="change_carrier_number">Change Carrier Number</string>
+    <string name="setting_default_carrier_content">The carrier<b>%1$s</b> is using for sending Bulk SMS. The change carrier option will be displayed when the device has multiple carrier numbers.</string>
+    <string name="carrier_number_used_to_send_this_bulk_sms">Carrier number used to send the Bulk SMS</string>
+    <string name="limit_exceeds_please_send_bulk_sms_less_than_thousand_contacts">Limit exceeds please send bulk sms less than thousand contacts</string>
+    <string name="number_of_contacts_showing">Number of contacts showing : %1$d</string>
+    <string name="contact_list_must_not_be_empty">Contact list must not be empty!</string>
 </resources>

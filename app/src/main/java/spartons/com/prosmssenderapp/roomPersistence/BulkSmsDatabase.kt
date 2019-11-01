@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import spartons.com.prosmssenderapp.roomPersistence.converters.BulkSmsStatusConverter
+import spartons.com.prosmssenderapp.roomPersistence.converters.CollectionTypeConverter
 
 
 /**
@@ -14,7 +16,10 @@ import androidx.room.TypeConverters
  */
 
 @Database(entities = [BulkSms::class], version = 1, exportSchema = false)
-@TypeConverters(DateTypeConverter::class, CollectionTypeConverter::class)
+@TypeConverters(
+    CollectionTypeConverter::class,
+    BulkSmsStatusConverter::class
+)
 abstract class BulkSmsDatabase : RoomDatabase() {
 
     abstract fun bulkSmsDao(): BulkSmsDao
@@ -29,7 +34,11 @@ abstract class BulkSmsDatabase : RoomDatabase() {
         }
 
         private fun createDatabase(context: Context) =
-            Room.databaseBuilder(context.applicationContext, BulkSmsDatabase::class.java, "bulk_sms.db")
+            Room.databaseBuilder(
+                context.applicationContext,
+                BulkSmsDatabase::class.java,
+                "bulk_sms.db"
+            )
                 .build()
     }
 }

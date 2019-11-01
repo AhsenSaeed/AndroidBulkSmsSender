@@ -3,7 +3,7 @@ package spartons.com.prosmssenderapp.roomPersistence
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import spartons.com.prosmssenderapp.activities.sendBulkSms.data.SmsContact
 
 
 /**
@@ -17,19 +17,21 @@ class BulkSms(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "bulk_sms_id")
-    val id: Int = 0,
+    val id: Long = 0,
     @ColumnInfo(name = "sms_contacts")
-    val smsContacts: Array<String>,
+    val smsContacts: List<SmsContact>,
     @ColumnInfo(name = "sms_content")
     val smsContent: String,
     @ColumnInfo(name = "start_date_time")
-    val startDateTime: Date
-) {
-
+    val startDateTime: Long,
     @ColumnInfo(name = "end_date_time")
-    lateinit var endDateTime: Date
-
+    val endDateTime: Long? = null,
+    @ColumnInfo(name = "carrier_name")
+    val carrierName: String,
+    @ColumnInfo(name = "status")
+    val bulkSmsStatus: BulkSmsStatus = BulkSmsStatus.IN_PROGRESS
+) {
     override fun toString(): String {
-        return "BulkSms(id=$id, smsContacts=${Arrays.toString(smsContacts)}, smsContent='$smsContent', startDateTime=$startDateTime, endDateTime=$endDateTime)"
+        return "BulkSms(id=$id, smsContacts=$smsContacts, smsContent='$smsContent', startDateTime=$startDateTime, endDateTime=$endDateTime, carrierName='$carrierName', bulkSmsStatus=$bulkSmsStatus)"
     }
 }

@@ -1,5 +1,7 @@
 package spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFragments.settings.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -7,23 +9,23 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.checkbox.MaterialCheckBox
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import spartons.com.prosmssenderapp.R
 import spartons.com.prosmssenderapp.activities.main.fragments.mainScreen.tabFragments.settings.viewModel.SettingsFragmentViewModel
 import spartons.com.prosmssenderapp.fragments.BaseFragment
 import spartons.com.prosmssenderapp.helper.SharedPreferenceHelper
 import spartons.com.prosmssenderapp.helper.SharedPreferenceHelper.Companion.BULK_SMS_MESSAGE_DELAY_SECONDS
-import spartons.com.prosmssenderapp.helper.SharedPreferenceHelper.Companion.BULK_SMS_STORE_MESSAGE_HISTORY_FLAG
+import spartons.com.prosmssenderapp.helper.SharedPreferenceHelper.Companion.BULK_SMS_PREFERRED_MULTIPLE_CARRIER_NUMBER_FLAG
 import spartons.com.prosmssenderapp.helper.UiHelper
-import spartons.com.prosmssenderapp.util.ViewModelFactory
-import spartons.com.prosmssenderapp.util.getMutedColor
-import spartons.com.prosmssenderapp.util.getResourceString
-import javax.inject.Inject
+import spartons.com.prosmssenderapp.util.*
+import spartons.com.prosmssenderapp.util.Constants.CARRIER_NAME_SPLITTER
 
 /**
  * Ahsen Saeed}
@@ -33,43 +35,33 @@ import javax.inject.Inject
 
 class SettingsFragment : BaseFragment() {
 
-    @Inject
-    lateinit var factory: ViewModelFactory
-    @Inject
-    lateinit var sharedPreferenceHelper: SharedPreferenceHelper
-    @Inject
-    lateinit var uiHelper: UiHelper
-
-    private lateinit var bulkSmsSettingNoteTextView: TextView
-    private lateinit var bulkSmsSettingDelaySmsDecrementTextView: TextView
-    private lateinit var bulkSmsSettingDelayTextView: TextView
-    private lateinit var bulkSmsSettingDelaySmsErrorTextView: TextView
-    private lateinit var bulkSmsSettingDelaySmsIncrementTextView: TextView
-    private lateinit var bulkSmsSettingDeleteAllSmsButton: MaterialButton
-    private lateinit var bulkSmsSettingStoreHistoryCheckBox: MaterialCheckBox
-    private lateinit var bulkSmsSettingShowAdButton: MaterialButton
-
-    private lateinit var viewModel: SettingsFragmentViewModel
+    private val sharedPreferenceHelper: SharedPreferenceHelper by inject()
+    private val viewModel: SettingsFragmentViewModel by viewModel()
+    private val uiHelper: UiHelper by inject()
 
     companion object {
+        private const val ASK_READ_PHONE_STATE_PERMISSION_REQUEST_CODE = 1002
+        private const val LEAST_MINIMUM_SMS_DELAY_VALUE = 4
 
-        private const val LEAST_MINIMUM_SMS_DELAY_VALUE = 2
-
-        fun getInstance() =
-            SettingsFragment()
+        fun getInstance() = SettingsFragment()
     }
 
     override fun getLayoutResId() = R.layout.fragment_settings
 
-    override fun inOnCreateView(mRootView: View, container: ViewGroup?, savedInstanceState: Bundle?) {
-        /**
-         * Injecting the current setting fragment to dependency graph so that we can inject our models.
-         */
+    override fun inOnCreateView(
+        mRootView: View, container: ViewGroup?, savedInstanceState: Bundle?
+    ) {
 
-        fragmentComponent.inject(this)
-        viewModel = ViewModelProviders.of(this, factory)[SettingsFragmentViewModel::class.java]
-
-        initViews(mRootView)
+        val bulkSmsSettingNoteTextView =
+            mRootView.findViewById<TextView>(R.id.bulkSmsSettingNoteTextView)
+        val bulkSmsSettingDelayTextView =
+            mRootView.findViewById<TextView>(R.id.bulkSmsSettingDelayTextView)
+        val bulkSmsSettingDelaySmsErrorTextView =
+            mRootView.findViewById<TextView>(R.id.bulkSmsSettingDelaySmsErrorTextView)
+        val bulkSmsSettingDefaultCarrierNumberTextView =
+            mRootView.findViewById<TextView>(R.id.bulkSmsSettingDefaultCarrierNumberTextView)
+        val bulkSmsSettingChangeCarrierButton =
+            mRootView.findViewById<MaterialButton>(R.id.bulkSmsSettingChangeCarrierButton)
 
         /**
          * Creating multicolor Note text with the help SpannableStringBuilder.
@@ -95,55 +87,45 @@ class SettingsFragment : BaseFragment() {
          * Decrement the delay sms in seconds if the current delay greater than 2 seconds.
          */
 
-        bulkSmsSettingDelaySmsDecrementTextView.setOnClickListener {
-            var delayValue = bulkSmsSettingDelayTextView.text.toString().toInt()
-            if (delayValue <= LEAST_MINIMUM_SMS_DELAY_VALUE) {
-                bulkSmsSettingDelaySmsErrorTextView.text =
-                    getResourceString(R.string.delay_must_be_greater_than_two_seconds)
-                bulkSmsSettingDelaySmsErrorTextView.visibility = VISIBLE
-                return@setOnClickListener
+        mRootView.findViewById<TextView>(R.id.bulkSmsSettingDelaySmsDecrementTextView)
+            .setOnClickListener {
+                var delayValue = bulkSmsSettingDelayTextView.text.toString().toInt()
+                if (delayValue <= LEAST_MINIMUM_SMS_DELAY_VALUE) {
+                    bulkSmsSettingDelaySmsErrorTextView.text =
+                        getResourceString(R.string.delay_must_be_greater_than_two_seconds)
+                    bulkSmsSettingDelaySmsErrorTextView.visibility = VISIBLE
+                    return@setOnClickListener
+                }
+                bulkSmsSettingDelayTextView.text = (--delayValue).toString()
+                if (bulkSmsSettingDelaySmsErrorTextView.isVisible)
+                    bulkSmsSettingDelaySmsErrorTextView.visibility = GONE
+                sharedPreferenceHelper.put(BULK_SMS_MESSAGE_DELAY_SECONDS, delayValue)
             }
-            bulkSmsSettingDelayTextView.text = (--delayValue).toString()
-            if (bulkSmsSettingDelaySmsErrorTextView.isVisible)
-                bulkSmsSettingDelaySmsErrorTextView.visibility = GONE
-            sharedPreferenceHelper.putInt(BULK_SMS_MESSAGE_DELAY_SECONDS, delayValue)
-        }
 
         /**
          * Increment the delay sms in seconds.
          */
 
-        bulkSmsSettingDelaySmsIncrementTextView.setOnClickListener {
-            var delayValue = bulkSmsSettingDelayTextView.text.toString().toInt()
-            bulkSmsSettingDelayTextView.text = (++delayValue).toString()
-            if (bulkSmsSettingDelaySmsErrorTextView.isVisible)
-                bulkSmsSettingDelaySmsErrorTextView.visibility = GONE
-            sharedPreferenceHelper.putInt(BULK_SMS_MESSAGE_DELAY_SECONDS, delayValue)
-        }
+        mRootView.findViewById<TextView>(R.id.bulkSmsSettingDelaySmsIncrementTextView)
+            .setOnClickListener {
+                var delayValue = bulkSmsSettingDelayTextView.text.toString().toInt()
+                bulkSmsSettingDelayTextView.text = (++delayValue).toString()
+                if (bulkSmsSettingDelaySmsErrorTextView.isVisible)
+                    bulkSmsSettingDelaySmsErrorTextView.visibility = GONE
+                sharedPreferenceHelper.put(BULK_SMS_MESSAGE_DELAY_SECONDS, delayValue)
+            }
 
         /**
          * Delete all bulk sms history from SQLite database.
          */
 
-        bulkSmsSettingDeleteAllSmsButton.setOnClickListener {
-            viewModel.deleteAllBulkSms()
-            uiHelper.showSnackBar(mRootView, getResourceString(R.string.all_sms_history_deleted_successfully))
-        }
-
-        /**
-         * Getting the current message store history flag from shared preferences and apply the value to check box.
-         */
-
-        val messageHistoryFlag = sharedPreferenceHelper.getBoolean(BULK_SMS_STORE_MESSAGE_HISTORY_FLAG)
-        bulkSmsSettingStoreHistoryCheckBox.isChecked = messageHistoryFlag
-
-        /**
-         * Applying the check change listener to message history check box and store the selected inside the shared preference.
-         */
-
-        bulkSmsSettingStoreHistoryCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferenceHelper.putBoolean(BULK_SMS_STORE_MESSAGE_HISTORY_FLAG, isChecked)
-        }
+        mRootView.findViewById<MaterialButton>(R.id.bulkSmsSettingDeleteAllSmsButton)
+            .setOnClickListener {
+                viewModel.deleteAllBulkSms()
+                requireActivity().snackbar(
+                    mRootView, getResourceString(R.string.all_sms_history_deleted_successfully)
+                )
+            }
 
         /**
          * Retrieving the current delay sms from shared preference and setting it.
@@ -152,19 +134,100 @@ class SettingsFragment : BaseFragment() {
         val delayValue = sharedPreferenceHelper.getInt(BULK_SMS_MESSAGE_DELAY_SECONDS)
         bulkSmsSettingDelayTextView.text = delayValue.toString()
 
-        bulkSmsSettingShowAdButton.setOnClickListener {
-            uiHelper.showSnackBar(mRootView, getResourceString(R.string.feature_not_added_yet))
+        mRootView.findViewById<MaterialButton>(R.id.bulkSmsSettingShowAdButton).setOnClickListener {
+            requireActivity().snackbar(mRootView, getResourceString(R.string.feature_not_added_yet))
         }
+
+        val preferredCarrierNumber =
+            sharedPreferenceHelper.getString(SharedPreferenceHelper.BULK_SMS_PREFERRED_CARRIER_NUMBER)
+                ?.split(CARRIER_NAME_SPLITTER)?.get(1)
+
+        if (preferredCarrierNumber != null) {
+            bulkSmsSettingDefaultCarrierNumberTextView.visibility = VISIBLE
+            updateCurrentCarrierText(
+                bulkSmsSettingDefaultCarrierNumberTextView,
+                preferredCarrierNumber
+            )
+        }
+
+        if (sharedPreferenceHelper.getBoolean(BULK_SMS_PREFERRED_MULTIPLE_CARRIER_NUMBER_FLAG))
+            bulkSmsSettingChangeCarrierButton.visibility = VISIBLE
+
+        bulkSmsSettingChangeCarrierButton.setOnClickListener {
+            if (requireActivity().isHasPermission(Manifest.permission.READ_PHONE_STATE))
+                viewModel.handleDeviceCarrierNumbers()
+            else
+                uiHelper.showSimpleMaterialDialog(
+                    requireActivity(),
+                    R.string.allow_following_permission,
+                    R.string.read_phone_state_permission_content, null,
+                    "Grant Permission", false, negativeText = "Cancel",
+                    negativeTextButtonListener = { requireContext().toast("Cancelled the operation") }) {
+                    requireActivity().askPermission(
+                        arrayOf(Manifest.permission.READ_PHONE_STATE),
+                        ASK_READ_PHONE_STATE_PERMISSION_REQUEST_CODE
+                    )
+                }
+        }
+
+        viewModel.uiState.observe(this, Observer {
+            val uiModel = it ?: return@Observer
+            if (uiModel.noDeviceNumber)
+                requireContext().toast(
+                    "Seems like you ejected the carrier network sims, please insert then try again",
+                    Toast.LENGTH_LONG
+                )
+            if (uiModel.showMultipleCarrierNumber != null && !uiModel.showMultipleCarrierNumber.consumed)
+                uiModel.showMultipleCarrierNumber.consume()?.let { carriers ->
+                    uiHelper.showSingleSelectionListDialog(
+                        requireActivity(),
+                        R.string.please_select_from_which_carrier_number_you_want_to_send_bulk_sms,
+                        cancelable = true,
+                        choices = carriers
+                    ) { (number, checkedValue) ->
+                        sharedPreferenceHelper.put(
+                            SharedPreferenceHelper.BULK_SMS_PREFERRED_CARRIER_NUMBER,
+                            number
+                        )
+                        sharedPreferenceHelper.put(
+                            BULK_SMS_PREFERRED_MULTIPLE_CARRIER_NUMBER_FLAG, checkedValue
+                        )
+                        updateCurrentCarrierText(
+                            bulkSmsSettingDefaultCarrierNumberTextView,
+                            number.split(CARRIER_NAME_SPLITTER)[1]
+                        )
+                    }
+                }
+        })
     }
 
-    private fun initViews(view: View) {
-        bulkSmsSettingNoteTextView = view.findViewById(R.id.bulkSmsSettingNoteTextView)
-        bulkSmsSettingDelaySmsDecrementTextView = view.findViewById(R.id.bulkSmsSettingDelaySmsDecrementTextView)
-        bulkSmsSettingDelayTextView = view.findViewById(R.id.bulkSmsSettingDelayTextView)
-        bulkSmsSettingDelaySmsErrorTextView = view.findViewById(R.id.bulkSmsSettingDelaySmsErrorTextView)
-        bulkSmsSettingDelaySmsIncrementTextView = view.findViewById(R.id.bulkSmsSettingDelaySmsIncrementTextView)
-        bulkSmsSettingDeleteAllSmsButton = view.findViewById(R.id.bulkSmsSettingDeleteAllSmsButton)
-        bulkSmsSettingStoreHistoryCheckBox = view.findViewById(R.id.bulkSmsSettingStoreHistoryCheckBox)
-        bulkSmsSettingShowAdButton = view.findViewById(R.id.bulkSmsSettingShowAdButton)
+    private fun updateCurrentCarrierText(textView: TextView, content: String) {
+        textView.text =
+            String.format(
+                getString(
+                    R.string.setting_default_carrier_content, content
+                )
+            )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == ASK_READ_PHONE_STATE_PERMISSION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                viewModel.handleDeviceCarrierNumbers()
+            else
+                uiHelper.showBottomSheetDialog(
+                    requireActivity(), R.string.phone_state_permission_denied_content,
+                    R.string.phone_state_permission_denied,
+                    "Ask Permission"
+                ) {
+                    requireActivity().askPermission(
+                        arrayOf(Manifest.permission.READ_PHONE_STATE),
+                        ASK_READ_PHONE_STATE_PERMISSION_REQUEST_CODE
+                    )
+                }
+        }
     }
 }
