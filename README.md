@@ -3,7 +3,9 @@ Pro Bulk Sms Sender app is an open source Android application with a material de
 
 ### Here's the demo of Pro Bulk Sms Sender Application.
 Here is the link of demo https://www.youtube.com/watch?v=28KWJWpS5wk
+
 Here is the link for applying dual sim configuration https://www.youtube.com/watch?v=tbXx1p4bMHc
+
 Here is the link for cancelling the on-going Bulk SMS operation https://www.youtube.com/watch?v=GnZQwo1F6tE
 
 ### Features of Bulk Sms Sender
