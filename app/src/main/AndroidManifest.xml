@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
+            android:requestLegacyExternalStorage="true"
             android:allowBackup="true"
             android:name=".backend.MyCustomApplication"
             android:icon="@mipmap/ic_launcher"
